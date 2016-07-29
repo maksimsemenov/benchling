@@ -1,0 +1,11 @@
+.tabs {
+  position: relative;
+  padding: 10px;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}

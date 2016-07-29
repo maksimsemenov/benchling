@@ -1,0 +1,10 @@
+.app {
+}
+
+.workspace {
+  position: relative;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1047px;
+}
