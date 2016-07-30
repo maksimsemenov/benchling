@@ -54,9 +54,10 @@ const Tab = ({ name, id, activeTab, hoveredTab, onTabClick, onTabHover, onTabLea
     const bRatio = 150 / basicStep - 2
     const lBoundary = bRatio
     const rBoundary = numberOfTabs - bRatio
+    //const stepM = padding > 0 ? stepMultiplier(padding) :
 
     const basicPoint = activeId > lBoundary && activeId < rBoundary ? basicStep * activeId : boundaryLeft(activeId, bRatio, basicStep)
-    const left = padding === 0 ? basicPoint : basicPoint + (padding * Math.max(basicStep, (150 / (Math.abs(padding) + 2))))
+    const left = padding === 0 ? basicPoint : basicPoint + padding * Math.max(basicStep, (150 / (Math.abs(padding) + 2) )))
     console.log(basicStep, 150 / (Math.abs(padding) + 2), Math.max(basicStep, (150 / (Math.abs(padding) + 2))))
 
     return ({
