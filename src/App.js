@@ -27,16 +27,15 @@ class App extends Component {
   render() {
     return (
       <div className='app'>
-        <div className='workspace'>        
-          <Tabs
-            tabs={tabsList}
-            activeTab={this.state.active}
-            hoveredTab={this.state.hovered}
-            onTabClick={this.handleTabClick}
-            onTabHover={this.handleTabHover}
-            onTabLeave={this.handleTabLeave}
-          />
-        </div>
+        <Tabs
+          tabs={tabsList}
+          activeTab={this.state.active}
+          hoveredTab={this.state.hovered}
+          onTabClick={this.handleTabClick}
+          onTabHover={this.handleTabHover}
+          onTabLeave={this.handleTabLeave}
+        />
+        <div className='content' />
       </div>
     )
   }
