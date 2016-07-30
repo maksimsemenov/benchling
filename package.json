@@ -2,7 +2,7 @@
   "name": "benchling",
   "version": "0.0.1",
   "private": true,
-  "homepage": "benchling",
+  "homepage": "./",
   "devDependencies": {
     "react-scripts": "0.2.0"
   },
