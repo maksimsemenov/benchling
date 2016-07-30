@@ -1,5 +1,5 @@
 import React from 'react'
-import { Motion, spring } from 'react-motion'
+import { Motion, spring, presets } from 'react-motion'
 import classNames from 'classnames'
 import './Tab.css'
 
@@ -23,16 +23,45 @@ const tabLeftPadding = (id, activeTab, hoveredTab) => {
 const tabRightPadding = (id, activeTab, hoveredTab) => {
   return hoveredTab >= 0 ? Math.max(0, hoveredTab - id) : Math.max(0, activeTab - id)
 }
-const margin = (padding) => padding > 6 ? 100 : Math.pow(padding, 2) * 5
+const boundaryLeft = (id, bRatio, basicStep, lEnd = 0, rEnd = 28, width = 1000, tWidth = 150) => {
+  if (id < lEnd + bRatio) {
+    return tWidth * stepMultiplier(id - lEnd)
+  } else if (id > rEnd - bRatio) {
+    return width - (tWidth * (1 + stepMultiplier(rEnd - 1 - id)))
+  }
+  return 0
+}
+const stepMultiplier = step => {
+  let m = 0
+  for (let i = 1; i <= step; i++) {
+    m += (1 / (i + 2))
+  }
+  return m
+}
 
-const Tab = ({ name, id, activeTab, hoveredTab, onTabClick, onTabHover, onTabLeave, compression = 150 }) => {
-  const getDefaultStyle = () => ({ marginLeft: 0, marginRight: 0 })
-  const getStyle = (tabLeftPadding, tabRightPadding) => {
-    console.log(tabLeftPadding, margin(tabLeftPadding), tabRightPadding, margin(tabRightPadding))
+const Tab = ({ name, id, activeTab, hoveredTab, onTabClick, onTabHover, onTabLeave, numberOfTabs }) => {
+  const lPadding = tabLeftPadding(id, activeTab, hoveredTab)
+  const rPadding = tabRightPadding(id, activeTab, hoveredTab)
+  const basicStep = (1000 - 150) / numberOfTabs
+  const getDefaultStyle = (id, lPadding, rPadding) => ({
+    left: (basicStep * id) + 20,
+    zIndex: 30 - Math.max(lPadding, rPadding)
+  })
+  const getStyle = (id, activeTab, hoveredTab, numberOfTabs) => {
+    const basicStep = (1000 - 150) / numberOfTabs
+    const activeId = hoveredTab > -1 ? hoveredTab : activeTab
+    const padding = id - activeId
+    const bRatio = 150 / basicStep - 2
+    const lBoundary = bRatio
+    const rBoundary = numberOfTabs - bRatio
+
+    const basicPoint = activeId > lBoundary && activeId < rBoundary ? basicStep * activeId : boundaryLeft(activeId, bRatio, basicStep)
+    const left = padding === 0 ? basicPoint : basicPoint + (padding * Math.max(basicStep, (150 / (Math.abs(padding) + 2))))
+    console.log(basicStep, 150 / (Math.abs(padding) + 2), Math.max(basicStep, (150 / (Math.abs(padding) + 2))))
+
     return ({
-    marginRight: -spring(margin(tabLeftPadding)),
-    marginRLeft: -spring(margin(tabRightPadding)),
-    width: spring(Math.max(10, 150 / Math.min(tabLeftPadding, tabRightPadding)))
+      left: spring(left  + 20, presets.noWobble),
+      zIndex: 30 - Math.abs(padding)
   })
 }
   const tabClasses = classNames({
@@ -41,8 +70,8 @@ const Tab = ({ name, id, activeTab, hoveredTab, onTabClick, onTabHover, onTabLea
   })
   return (
     <Motion
-      defaultStyle={getDefaultStyle()}
-      style={getStyle(tabLeftPadding(id, activeTab, hoveredTab), tabRightPadding(id, activeTab, hoveredTab))} >
+      defaultStyle={getDefaultStyle(id, lPadding, rPadding)}
+      style={getStyle(id, activeTab, hoveredTab, numberOfTabs)} >
       {interpolatedStyle =>
         <li
           className={tabClasses}

@@ -8,7 +8,7 @@ class Tabs extends Component {
     return (
       <ul className='tabs' ref={(c) => {this.tabs = c}}>
         {tabs.map(tab =>
-          <Tab {...rest} name={tab.name} id={tab.id} key={tab.id} />
+          <Tab {...rest} name={tab.name} id={tab.id} key={tab.id} numberOfTabs={tabs.length} />
         )}
       </ul>
     )
